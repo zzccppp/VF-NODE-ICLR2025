@@ -10,10 +10,6 @@ __pycache__/
 debug_plots/
 outputs/
 
-# Project specific files
-pyproject.toml
-uv.lock
-
 # IDE and editor files
 .vscode/
 .idea/
