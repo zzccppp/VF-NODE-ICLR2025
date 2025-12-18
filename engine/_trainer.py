@@ -125,6 +125,10 @@ class Trainer:
             or "Flow" in self.cfg.model.type
         ):
             tot_kwargs.update({"obs_size": self.cfg.ode.obs_size})
+        
+        elif self.cfg.model.type == "StiffNeuralODE":
+            tot_kwargs.update({"obs_size": self.cfg.ode.obs_size})
+            tot_kwargs.update({"scale": jnp.asarray(self.cfg.model.kwargs.scale)})
 
         elif self.cfg.model.type == "NeuralCDE":
             tot_kwargs.update(

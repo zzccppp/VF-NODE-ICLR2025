@@ -1,0 +1,11 @@
+type: StiffNeuralODE
+kwargs:
+  width_size: 128
+  depth: 4
+  scale: [1.0, 1.0e-05, 1.0]
+  
+solver:
+  solver_type: Kvaerno5
+  adjoint_mode: 0
+  rtol: 1.0e-6
+  atol: 1.0e-7

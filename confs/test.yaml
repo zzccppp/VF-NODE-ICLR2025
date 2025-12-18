@@ -1,0 +1,45 @@
+project: base
+load: true
+ode:
+  auto: true
+  type: ChemicalReactionODE
+  obs_size: 3
+data:
+  T: 10.0
+  traj_num: 150
+  point_num: 100
+  noise_level: 0.01
+  ratio: 0.8
+  split_num: 5
+  split: false
+model:
+  solver:
+    solver_type: Kvaerno5
+    adjoint_mode: 0
+    rtol: 1.0e-06
+    atol: 1.0e-07
+  type: StiffNeuralODE
+  kwargs:
+    width_size: 128
+    depth: 4
+    scale:
+    - 1.0
+    - 1.0e-05
+    - 1.0
+opt_type: adam
+epochs: 1000
+seed: 1
+use_wandb: false
+loss:
+  type: spline_vf_loss
+  kwargs:
+    func_num: 80
+    smoothing: 0.99999
+scheduler:
+  type: cosine_onecycle_schedule
+  kwargs:
+    transition_steps: 200
+    peak_value: 0.01
+    pct_start: 0.2
+    div_factor: 100.0
+    final_div_factor: 1000.0

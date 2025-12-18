@@ -1,0 +1,2 @@
+type: ChemicalReactionODE
+obs_size: 3

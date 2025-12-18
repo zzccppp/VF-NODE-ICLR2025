@@ -20,12 +20,20 @@ data:
     split_num: 5
     split: False
 
+# model:
+#     solver:
+#         solver_type: Dopri5
+#         adjoint_mode: 0
+#         rtol: 1.0e-3
+#         atol: 1.0e-6
+
 model:
     solver:
-        solver_type: Dopri5
+        solver_type: Kvaerno5
         adjoint_mode: 0
-        rtol: 1.0e-3
-        atol: 1.0e-6
+        rtol: 1.0e-6
+        atol: 1.0e-8
+
 
 opt_type: adam
 epochs: 5000
