@@ -18,14 +18,14 @@ model:
     adjoint_mode: 0
     rtol: 1.0e-06
     atol: 1.0e-07
-  type: StiffNeuralODE
+  type: NeuralODE
   kwargs:
     width_size: 128
     depth: 4
     scale:
-    - 1.0
-    - 1.0e-05
-    - 1.0
+      - 1.0
+      - 1.0e-05
+      - 1.0
 opt_type: adam
 epochs: 1000
 seed: 1
@@ -43,3 +43,7 @@ scheduler:
     pct_start: 0.2
     div_factor: 100.0
     final_div_factor: 1000.0
+
+hydra:
+  run:
+    dir: outputs/${project}/${ode.type}/${model.type}/${loss.type}/seed${seed}/scale${oc.select:model.kwargs.scale.1,none}

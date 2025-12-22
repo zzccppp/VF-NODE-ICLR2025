@@ -12,6 +12,7 @@ from typing import Callable
 
 import jax, equinox as eqx, diffrax as dfx
 from jaxtyping import Float, Array, Key
+import jax.numpy as jnp
 
 from ._nde_solver import SolverKwargs, generate_nde_solver_fn
 
@@ -33,6 +34,7 @@ class ODE_Func(eqx.Module):
         - `final_activation`: `Callable` - Final activation function
     '''
     mlp: eqx.nn.MLP
+    scale: jnp.ndarray
     
     def __init__(
         self, 
@@ -42,6 +44,7 @@ class ODE_Func(eqx.Module):
         depth: int = 4, 
         activation: Callable = jax.nn.elu, 
         final_activation: Callable = lambda x: x,
+        scale = None
     ):
         super().__init__()
         self.mlp = eqx.nn.MLP(
@@ -49,8 +52,13 @@ class ODE_Func(eqx.Module):
             activation, final_activation, key = key
         )
         
+        if scale is None:
+            self.scale = jnp.ones(obs_size)
+        else:
+            self.scale = jnp.asarray(scale)
+        
     def __call__(self, t, y, args = None):
-        return self.mlp(y)
+        return self.mlp(y) * self.scale
 
 
 class NeuralODE(eqx.Module):
@@ -81,12 +89,14 @@ class NeuralODE(eqx.Module):
         depth: int = 4, 
         activation: Callable = jax.nn.elu, 
         final_activation: Callable = lambda x: x,
-        solver_kws: SolverKwargs = SolverKwargs()
+        solver_kws: SolverKwargs = SolverKwargs(),
+        scale = None
     ):
         super().__init__()
         self.ode_func = ODE_Func(
             key, obs_size, width_size, depth, 
-            activation, final_activation
+            activation, final_activation,
+            scale
         )
         self.solver_fn = generate_nde_solver_fn(solver_kws)
             
